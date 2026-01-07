@@ -7,13 +7,20 @@ use Illuminate\Http\Request;
 
 class MarcaController extends Controller
 {
+    // Injeção do Model
+    public function __construct(Marca $marca) {
+        $this->marca = $marca;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = Marca::all();
-
+        //$data = Marca::all();
+        $data = $this->marca->all();
+        if (empty($data)) {
+            return response()->json(['msg' => 'Não Encontrado'], 200);
+        }
         return response()->json($data, 200);
     }
 
@@ -30,23 +37,22 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        Marca::create($request->all());
-
-        return response()->json([
-            'msg' => 'Salvo Com Sucesso!'
-        ], 200);
+        //Marca::create($request->all());
+        $this->marca->create($request->all());
+        return response()->json(['msg' => 'Salvo Com Sucesso!'], 200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Marca $marca)
+    public function show($id)
     {
-        $data = Marca::find($marca->id);
-
-        return response()->json([
-            $data
-        ], 200);
+        //$data = Marca::find($marca->id);
+        $data = $this->marca->find($id);
+        if (empty($data)) {
+            return response()->json(['msg' => 'Não Encontrado'], 200);
+        }
+        return response()->json([$data], 200);
     }
 
     /**
@@ -60,24 +66,28 @@ class MarcaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Marca $marca)
+    public function update(Request $request, $id)
     {
-        $marca->update($request->all());
-
-        return response()->json([
-            'msg' => 'Atualizado Com Sucesso!'
-        ], 200);
+        //$marca->update($request->all());
+        $data = $this->marca->find($id);
+        if (empty($data)) {
+            return response()->json(['msg' => 'Não Encontrado'], 200);
+        }
+        $data->update($request->all());
+        return response()->json(['msg' => 'Atualizado Com Sucesso!'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Marca $marca)
+    public function destroy($id)
     {
-        $marca->delete();
-
-        return response()->json([
-            'msg' => 'Deletado Com Sucesso!'
-        ], 200);
+        //$marca->delete();
+        $data = $this->marca->find($id);
+        if (empty($data)) {
+            return response()->json(['msg' => 'Não Encontrado'], 200);
+        }
+        $data->delete();
+        return response()->json(['msg' => 'Deletado Com Sucesso!'], 200);
     }
 }
