@@ -19,7 +19,7 @@ class MarcaController extends Controller
         //$data = Marca::all();
         $data = $this->marca->all();
         if (empty($data)) {
-            return response()->json(['msg' => 'Não Encontrado'], 200);
+            return response()->json(['msg' => 'Não Encontrado'], 404);
         }
         return response()->json($data, 200);
     }
@@ -50,7 +50,7 @@ class MarcaController extends Controller
         //$data = Marca::find($marca->id);
         $data = $this->marca->find($id);
         if (empty($data)) {
-            return response()->json(['msg' => 'Não Encontrado'], 200);
+            return response()->json(['msg' => 'Não Encontrado'], 404);
         }
         return response()->json([$data], 200);
     }
@@ -71,7 +71,7 @@ class MarcaController extends Controller
         //$marca->update($request->all());
         $data = $this->marca->find($id);
         if (empty($data)) {
-            return response()->json(['msg' => 'Não Encontrado'], 200);
+            return response()->json(['msg' => 'Não Encontrado'], 404);
         }
         $data->update($request->all());
         return response()->json(['msg' => 'Atualizado Com Sucesso!'], 200);
@@ -85,7 +85,7 @@ class MarcaController extends Controller
         //$marca->delete();
         $data = $this->marca->find($id);
         if (empty($data)) {
-            return response()->json(['msg' => 'Não Encontrado'], 200);
+            return response()->json(['msg' => 'Não Encontrado'], 404);
         }
         $data->delete();
         return response()->json(['msg' => 'Deletado Com Sucesso!'], 200);
