@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Marca;
+use App\Utils\Util;
 use Illuminate\Http\Request;
 
 class MarcaController extends Controller
@@ -37,7 +38,8 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        //Marca::create($request->all());
+        $request->validate($this->marca->rules(), $this->marca->feedback());
+
         $this->marca->create($request->all());
         return response()->json(['msg' => 'Salvo Com Sucesso!'], 200);
     }
@@ -72,6 +74,12 @@ class MarcaController extends Controller
         $data = $this->marca->find($id);
         if (empty($data)) {
             return response()->json(['msg' => 'Não Encontrado'], 404);
+        }
+        if ($request->method() === Util::PATCH) {
+            $request->validate(Util::regrasDinamicas($request, $this->marca), $this->marca->feedback());
+        }
+        if ($request->method() === Util::PUT) {
+            $request->validate($this->marca->rules(), $this->marca->feedback());
         }
         $data->update($request->all());
         return response()->json(['msg' => 'Atualizado Com Sucesso!'], 200);
