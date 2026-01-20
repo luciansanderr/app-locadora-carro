@@ -16,7 +16,7 @@ class Marca extends Model
                 'min:3',
                 Rule::unique('marcas', 'nome')->ignore($this->id)
             ],
-            'imagem' => 'required|max:100'
+            'imagem' => 'required|file|mimes:png|max:2048',
         ];
     }
 
@@ -25,6 +25,9 @@ class Marca extends Model
             'required' => 'O campo :attribute é obrigatório!',
             'nome.unique' => 'O nome da marca já existe!',
             'nome.min' => 'O nome da marca deve ter no mínimo 3 caracteres!',
+            'imagem.mimes' => 'A imagem deve ser do tipo PNG!',
+            'imagem.max' => 'A imagem deve ter no máximo 2MB!',
+            'imagem.file' => 'A imagem deve ser um arquivo válido!',
         ];
     }
 }

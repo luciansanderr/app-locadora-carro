@@ -39,9 +39,12 @@ class MarcaController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->marca->rules(), $this->marca->feedback());
-
-        $this->marca->create($request->all());
-        return response()->json(['msg' => 'Salvo Com Sucesso!'], 200);
+        $path = $request->file('imagem')->store('imagens', 'public');
+        $data = $this->marca->create([
+            'nome' => $request->nome,
+            'imagem' => $path ?? null,
+        ]);
+        return response()->json(['msg' => 'Salvo Com Sucesso!', 'data' => $data], 200);
     }
 
     /**
@@ -97,5 +100,18 @@ class MarcaController extends Controller
         }
         $data->delete();
         return response()->json(['msg' => 'Deletado Com Sucesso!'], 200);
+    }
+
+    public function baixarImagem($id)
+    {
+        $data = $this->marca->find($id);
+        if (empty($data) || !$data->imagem) {
+            return response()->json(['msg' => 'Não Encontrado'], 404);
+        }
+        $path = storage_path('app/public/' . $data->imagem);
+        if (!file_exists($path)) {
+            return response()->json(['msg' => 'Imagem Não Encontrada'], 404);
+        }
+        return response()->download($path);
     }
 }
