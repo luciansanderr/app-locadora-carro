@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Marca;
 use App\Utils\Util;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MarcaController extends Controller
 {
@@ -84,8 +85,15 @@ class MarcaController extends Controller
         if ($request->method() === Util::PUT) {
             $request->validate($this->marca->rules(), $this->marca->feedback());
         }
-        $data->update($request->all());
-        return response()->json(['msg' => 'Atualizado Com Sucesso!'], 200);
+        if ($request->file('imagem')) {
+            Storage::disk('public')->delete($data->imagem);
+        }
+        $path = $request->file('imagem')->store('imagens', 'public');
+        $data->update([
+            'nome' => $request->nome ?? $data->nome,
+            'imagem' => $path ?? null,
+        ]);
+        return response()->json(['msg' => 'Atualizado Com Sucesso!', 'data' => $data], 200);
     }
 
     /**
@@ -98,6 +106,9 @@ class MarcaController extends Controller
         if (empty($data)) {
             return response()->json(['msg' => 'Não Encontrado'], 404);
         }
+
+        Storage::disk('public')->delete($data->imagem);
+
         $data->delete();
         return response()->json(['msg' => 'Deletado Com Sucesso!'], 200);
     }
