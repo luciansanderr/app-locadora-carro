@@ -19,7 +19,7 @@ class MarcaController extends Controller
     public function index()
     {
         //$data = Marca::all();
-        $data = $this->marca->all();
+        $data = $this->marca->with('modelo')->get();
         if (empty($data)) {
             return response()->json(['msg' => 'Não Encontrado'], 404);
         }
@@ -54,7 +54,7 @@ class MarcaController extends Controller
     public function show($id)
     {
         //$data = Marca::find($marca->id);
-        $data = $this->marca->find($id);
+        $data = $this->marca->with('modelo')->find($id);
         if (empty($data)) {
             return response()->json(['msg' => 'Não Encontrado'], 404);
         }

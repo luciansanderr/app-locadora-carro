@@ -15,13 +15,33 @@ class ModeloController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->modelo->all();
-        if (empty($data)) {
+        $atributos = [];
+        $atributosMarca = [];
+        $modelo = [];
+
+        if ($request->has('atributos_marca')) {
+            $atributosMarca = $request->atributos_marca;
+            $modelo = $this->modelo->with('marca:id,'.$atributosMarca);
+        }
+
+        if (!$request->has('atributos_marca')) {
+            $modelo = $this->modelo->with('marca');
+        }
+
+        if ($request->has('atributos')) {
+            $atributos = $request->atributos;
+            $modelo = $modelo->selectRaw($atributos);
+        }
+
+        $modelo = $modelo->get();
+
+        if (empty($modelo)) {
             return response()->json(['msg' => 'Não Encontrado'], 404);
         }
-        return response()->json($data, 200);
+
+        return response()->json($modelo, 200);
     }
 
     /**
@@ -56,7 +76,7 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $data = $this->modelo->find($id);
+        $data = $this->modelo->with('marca')->find($id);
         if (empty($data)) {
             return response()->json(['msg' => 'Não Encontrado'], 404);
         }

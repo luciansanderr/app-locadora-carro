@@ -35,4 +35,8 @@ class Modelo extends Model
             // 'imagem.file' => 'A imagem deve ser um arquivo válido!',
         ];
     }
+
+    public function marca() {
+        return $this->belongsTo(Marca::class);
+    }
 }

@@ -30,4 +30,8 @@ class Marca extends Model
             'imagem.file' => 'A imagem deve ser um arquivo válido!',
         ];
     }
+
+    public function modelo() {
+        return $this->hasMany(Modelo::class);
+    }
 }
