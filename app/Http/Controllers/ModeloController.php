@@ -37,7 +37,7 @@ class ModeloController extends Controller
 
         if ($request->has('filtro')) {
             $filtro = explode(':', $request->filtro);
-            $modelo = $this->modelo->where($filtro[0], $filtro[1], $filtro[2]);
+            $modelo = $modelo->where($filtro[0], $filtro[1], $filtro[2]);
         }
 
         $modelo = $modelo->get();
