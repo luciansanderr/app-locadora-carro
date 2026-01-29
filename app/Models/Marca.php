@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 
 class Marca extends Model
 {
-    protected $fillable = ['nome', 'imagem'];
+    protected $fillable = ['id', 'nome', 'imagem'];
 
     public function rules() {
         return [
