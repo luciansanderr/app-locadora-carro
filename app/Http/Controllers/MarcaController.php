@@ -23,7 +23,6 @@ class MarcaController extends Controller
         //$data = Marca::all();
         $atributos = [];
         $atributosModelo = [];
-        $marca = [];
 
         if ($request->has('atributos_modelo')) {
             $atributosModelo = "modelo:marca_id,". $request->atributos_modelo;
