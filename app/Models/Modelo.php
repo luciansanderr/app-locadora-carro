@@ -39,4 +39,8 @@ class Modelo extends Model
     public function marca() {
         return $this->belongsTo(Marca::class);
     }
+
+    public function carro() {
+        return $this->hasMany(Carro::class);
+    }
 }
