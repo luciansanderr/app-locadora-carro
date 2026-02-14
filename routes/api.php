@@ -14,6 +14,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('v1')->middleware('jwt.auth')->group(function () {
+    Route::post('/me', [AuthController::class, 'me']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
     Route::apiResource('cliente', ClienteController::class);
     Route::apiResource('carro', CarroController::class);
     Route::apiResource('locacao', LocacaoController::class);
@@ -22,6 +26,3 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function () {
 });
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::post('/refresh', [AuthController::class, 'refresh']);
-Route::post('/me', [AuthController::class, 'me']);
